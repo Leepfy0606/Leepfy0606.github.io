@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>有什么想说的话，写在这里吧！</title>
+    <style>
+        body {
+            background-color: rgb(60, 60, 70);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .a {
+            position: relative;
+            top: 100px;
+            font: 900 100px '';
+            color: #333;
+            cursor: pointer;
+        }
+
+        .a span {
+            transition: .5s;
+            transition-delay: calc(var(--i) * .1s);
+            color: #333;
+        }
+
+        .a span.active {
+            color: #fff;
+            text-shadow: 0 0 10px #fff,
+                0 0 20px #fff,
+                0 0 30px #fff,
+                0 0 50px #fff,
+                0 0 80px #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="a">
+        <span style="--i:1">有</span>
+        <span style="--i:2">什</span>
+        <span style="--i:3">么</span>
+        <span style="--i:4">不</span>
+        <span style="--i:5">方</span>
+        <span style="--i:6">便</span>
+        <span style="--i:7">说</span>
+        <span style="--i:8">的</span>
+        <span style="--i:9">话</span>
+        <span style="--i:10">可</span>
+        <span style="--i:11">以</span>
+        <span style="--i:12">在</span>
+        <span style="--i:13">这</span>
+        <span style="--i:14">里</span>
+        <span style="--i:15">说</span>
+        <span style="--i:16">哟</span>
+        <span style="--i:17">，</span>
+        <span style="--i:18">如</span>
+        <span style="--i:19">果</span>
+        <span style="--i:20">吵</span>
+        <span style="--i:21">架</span>
+        <span style="--i:22">了</span>
+        <span style="--i:23">可</span>
+        <span style="--i:24">以</span>
+        <span style="--i:25">给</span>
+        <span style="--i:26">个</span>
+        <span style="--i:27">台</span>
+        <span style="--i:28">阶</span>
+        <span style="--i:29">下</span>
+        <span style="--i:30">呢</span>
+        <span style="--i:31">。</span>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const spans = document.querySelectorAll('.a span');
+            spans.forEach((span, index) => {
+                setTimeout(() => {
+                    span.classList.add('active');
+                }, index * 200); // 500ms delay for each letter
+            });
+        });
+    </script>
+</body>
+
+</html>

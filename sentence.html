@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>！！！</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            /* background: linear-gradient(135deg, #ff7eb0, #ff1493); */
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        .cartoon {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: url('cartoon.png') no-repeat center center;
+            background-size: contain;
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .center-text {
+            position: absolute;
+            font-size: 36px;
+            font-weight: bold;
+            opacity: 0;
+            color: black;
+            font-family: Arial, sans-serif;
+        }
+
+        .text-part {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            opacity: 0;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- <div id="cartoon1" class="cartoon" style="top: 0; left: 0;">见</div>
+    <div id="cartoon2" class="cartoon" style="top: 0; right: 0;">一</div>
+    <div id="cartoon3" class="cartoon" style="bottom: 0; left: 0;">见</div>
+    <div id="cartoon4" class="cartoon" style="bottom: 0; right: 0;">吧</div>
+    <div id="centerText" class="center-text">宝</div> -->
+    <div id="textPart" class="text-part">勇敢！魄力！一往无前！！！</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartoons = document.querySelectorAll('.cartoon');
+            const centerText = document.getElementById('centerText');
+            const textPart = document.getElementById('textPart');
+            const textContent = textPart.textContent;
+            textPart.textContent = '';
+
+            const positions = [
+                { x: '12.5vw', y: '12.5vh' },
+                { x: '-12.5vw', y: '12.5vh' },
+                { x: '12.5vw', y: '-12.5vh' },
+                { x: '-12.5vw', y: '-12.5vh' }
+            ];
+
+            cartoons.forEach((cartoon, index) => {
+                setTimeout(() => {
+                    cartoon.style.transition = 'transform 1s, opacity 1s';
+                    cartoon.style.transform = `translate(${positions[index].x}, ${positions[index].y})`;
+                    cartoon.style.opacity = '1';
+
+                    setTimeout(() => {
+                        cartoon.style.opacity = '0';
+                    }, 1000);
+                }, index * 1000);
+            });
+
+            setTimeout(() => {
+                centerText.style.transition = 'opacity 2s';
+                centerText.style.opacity = '1';
+            }, 4000);
+
+            setTimeout(() => {
+                centerText.style.opacity = '0';
+            }, 6000);
+
+            setTimeout(() => {
+                textContent.split('').forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    span.style.opacity = '0';
+                    textPart.appendChild(span);
+                    setTimeout(() => {
+                        span.classList.add('fade-in');
+                    }, i * 100);
+                });
+                textPart.style.opacity = '1';
+            }, 0);
+        });
+    </script>
+</body>
+</html>
