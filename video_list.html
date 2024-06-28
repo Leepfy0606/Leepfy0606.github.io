@@ -60,38 +60,38 @@
       margin-bottom: 20px;
     }
 
-    img {
+    video {
       width: 100%;
       height: 100%;
       border-radius: 10px;
       object-fit: cover;
     }
 
-    #item-1:checked~.cards #song-1,
-    #item-2:checked~.cards #song-2,
-    #item-3:checked~.cards #song-3 {
+    #item-1:checked~.cards #video-1,
+    #item-2:checked~.cards #video-2,
+    #item-3:checked~.cards #video-3 {
       transform: translatex(0) scale(1);
       opacity: 1;
       z-index: 1;
     }
 
-    #item-1:checked~.cards #song-2,
-    #item-2:checked~.cards #song-3,
-    #item-3:checked~.cards #song-1 {
+    #item-1:checked~.cards #video-2,
+    #item-2:checked~.cards #video-3,
+    #item-3:checked~.cards #video-1 {
       transform: translatex(50%) scale(0.8);
       opacity: 0.6;
       z-index: 0;
     }
 
-    #item-1:checked~.cards #song-3,
-    #item-2:checked~.cards #song-1,
-    #item-3:checked~.cards #song-2 {
+    #item-1:checked~.cards #video-3,
+    #item-2:checked~.cards #video-1,
+    #item-3:checked~.cards #video-2 {
       transform: translatex(-50%) scale(0.8);
       opacity: 0.6;
       z-index: 0;
     }
 
-    /* 音乐播放器 */
+    /* 视频播放器 */
     .player {
       background-color: #fff;
       border-radius: 8px;
@@ -151,7 +151,7 @@
       background-color: #2992dc;
     }
 
-    /* 每次点击图片时，对应的歌曲列表就会向下移动 */
+    /* 每次点击视频时，对应的视频列表就会向下移动 */
     #item-2:checked~.player #test {
       transform: translateY(0);
     }
@@ -168,46 +168,46 @@
 
 <body>
   <div class="shell">
-    <input type="radio" name="music" id="item-1" checked>
-    <input type="radio" name="music" id="item-2">
-    <input type="radio" name="music" id="item-3">
+    <input type="radio" name="video" id="item-1" checked>
+    <input type="radio" name="video" id="item-2">
+    <input type="radio" name="video" id="item-3">
     <div class="cards">
-      <label class="card" for="item-1" id="song-1">
-        <img src="images/album_1.jpg">
+      <label class="card" for="item-1" id="video-1">
+        <video src="videos/video_1.mp4"></video>
       </label>
-      <label class="card" for="item-2" id="song-2">
-        <img src="images/album_2.jpg">
+      <label class="card" for="item-2" id="video-2">
+        <video src="videos/video_2.mp4"></video>
       </label>
-      <label class="card" for="item-3" id="song-3">
-        <img src="images/album_3.jpg">
+      <label class="card" for="item-3" id="video-3">
+        <video src="videos/video_3.mp4"></video>
       </label>
     </div>
     <!-- 播放器 -->
     <div class="player">
       <div class="information">
         <div>
-          <img src="./images/play.png" style="width:40px;margin-top: 5px;">
+          <img src="./images/play.png" style="width:40px;margin-top: 5px;" class="play-button">
         </div>
         <div class="info-area" id="test">
           <label class="song-info" id="song-info-1">
             <div class="title">熊猫占位1</div>
             <div class="Subheading">
               <div class="singer">2022-2-1</div>
-              <div class="time">3:01</div>
+              <div class="time" ,id="time-1">3:01</div>
             </div>
           </label>
           <label class="song-info" id="song-info-2">
             <div class="title">熊猫占位2</div>
             <div class="Subheading">
               <div class="singer">2022-2-2</div>
-              <div class="time">3:29</div>
+              <div class="time" ,id="time-2">3:29</div>
             </div>
           </label>
           <label class="song-info" id="song-info-3">
             <div class="title">熊猫占位3</div>
             <div class="Subheading">
               <div class="singer">2022-2-3</div>
-              <div class="time">3:09</div>
+              <div class="time" ,id="time-3">3:09</div>
             </div>
           </label>
         </div>
@@ -220,9 +220,125 @@
   </div>
   <!-- ---------------------------------------- -->
   <script>
+    var selectedVideoId = '1';
     $('input').on('change', function () {
       $('body').toggleClass('background');
+      selectedVideoId = $('input[name="video"]:checked').attr('id');
+      selectedVideoId = selectedVideoId.replace('item-', '');
+      var playButton = $('.play-button');
+      playButton.attr('src', './images/play.png');
+      for (let i = 0; i < 3; i++) {
+        var videoElement = $('#video-' + (i + 1)).find('video')[0];
+        if (videoElement) {
+
+          videoElement.pause();
+
+        } else {
+          console.error('Video element not found');
+        }
+      }
+      setBar();
     });
+
+    function updateProgressBar() {
+      videoElement = $('#video-' + selectedVideoId).find('video')[0];
+
+      if (videoElement) {
+
+        videoElement.ontimeupdate = function () {
+          var percentage = (videoElement.currentTime / videoElement.duration) * 100;
+          $('.progress').css('width', percentage + '%');
+
+          updateTimeDisplay();
+        };
+      }
+    }
+
+    function setBar() {
+      videoElement = $('#video-' + selectedVideoId).find('video')[0];
+      if (videoElement) {
+        var percentage = (videoElement.currentTime / videoElement.duration) * 100;
+        $('.progress').css('width', percentage + '%');
+      }
+      updateTimeDisplay();
+    }
+
+
+    function updateTimeDisplay() {
+      videoElement = $('#video-' + selectedVideoId).find('video')[0];
+      if (videoElement) {
+        var remainingTime = videoElement.duration - videoElement.currentTime;
+        var minutes = Math.floor(remainingTime / 60);
+        var seconds = Math.floor(remainingTime % 60);
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        var songInfo = document.getElementById('song-info-' + selectedVideoId);
+        songInfo.querySelector(".time").textContent = minutes + ':' + seconds;
+      }
+    }
+
+    $('.play-button').on('click', function () {
+      var playButton = $('.play-button');
+      var card = $(this).closest('.card');
+      var videoElement = $('#video-' + selectedVideoId).find('video')[0];
+      if (videoElement) {
+        if (videoElement.paused) {
+          videoElement.play();
+          playButton.attr('src', './images/pause.png');
+        } else {
+          videoElement.pause();
+          playButton.attr('src', './images/play.png');
+        }
+      } else {
+        console.error('Video element not found');
+      }
+
+      updateProgressBar();
+      updateTimeDisplay();
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var videoElement = $('#video-' + selectedVideoId).find('video')[0];
+
+      // 监听loadedmetadata事件
+      videoElement.addEventListener('loadedmetadata', function () {
+        setBar();
+      });
+    });
+
+    let isDragging = false;
+
+    $('.progress-bar').on('mousedown', function (event) {
+      isDragging = true;
+      updateVideoTime(event);
+    });
+
+    $(document).on('mousemove', function (event) {
+      if (isDragging) {
+        updateVideoTime(event);
+      }
+    });
+
+    $(document).on('mouseup', function () {
+      isDragging = false;
+    });
+
+    function updateVideoTime(event) {
+      var progressBar = $('.progress-bar');
+      var offset = progressBar.offset();
+      var width = progressBar.width();
+      var clickX = event.pageX - offset.left;
+      var percentage = (clickX / width) * 100;
+      var videoElement = $('#video-' + selectedVideoId).find('video')[0];
+      if (videoElement) {
+        videoElement.currentTime = (percentage / 100) * videoElement.duration;
+        setBar();
+      }
+    }
+
+
+
+
   </script>
 
 </body>
